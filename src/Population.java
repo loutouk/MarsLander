@@ -1,0 +1,73 @@
+import java.util.Comparator;
+import java.util.TreeSet;
+
+public class Population {
+
+    Individual[] individuals;
+
+    /*
+     * Constructors
+     */
+    // Create a population
+    public Population(int populationSize, boolean initialise) {
+        individuals = new Individual[populationSize];
+        // Initialise population
+        if (initialise) {
+            // Loop and create individuals
+            for (int i = 0; i < size(); i++) {
+                Individual newIndividual = new NavigationIndividual();
+                newIndividual.generateIndividual();
+                saveIndividual(i, newIndividual);
+            }
+        }
+    }
+
+    public void computeFitness() {
+
+    }
+
+    /* Getters */
+    public Individual getIndividual(int index) {
+        return individuals[index];
+    }
+
+    public Individual[] getFittest(int n) {
+
+        TreeSet<Individual> fittests = new TreeSet<>(new Comparator<Individual>() {
+            @Override
+            public int compare(Individual o1, Individual o2) {
+                double o1Fit = o1.getFitness();
+                double o2Fit = o2.getFitness();
+                if(o1Fit>o2Fit) {
+                    return 1;
+                } else if(o1Fit<o2Fit) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        // Loop through individuals to find fittest
+        for (int i = 0; i < size(); i++) {
+            fittests.add(getIndividual(i));
+        }
+
+        Individual[] nFittests = new Individual[n];
+        for(int i=0 ; i<n ; i++){
+            nFittests[i] = fittests.pollFirst();
+        }
+        return nFittests;
+    }
+
+    /* Public methods */
+    // Get population size
+    public int size() {
+        return individuals.length;
+    }
+
+    // Save individual
+    public void saveIndividual(int index, Individual indiv) {
+        individuals[index] = indiv;
+    }
+}
