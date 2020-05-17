@@ -1,22 +1,21 @@
-import java.util.ArrayList;
 
 public class FitnessCalc {
 
-    static double mass = 1;
-    static double xStart = 500;
-    static double yStart = 50;
-    static Vector gForceMars = new Vector(0, 3.711*mass);
+    static double mass = Main.mass;
+    static double xStart = Main.xStart;
+    static double yStart = Main.yStart;
+    static Vector gForceMars = Main.gForceMars;
 
     static double getFitness(NavigationIndividual individual) {
 
-        int fitness=10000;
-        int lastAngle=0;
         SpaceShuttle physicObject = new SpaceShuttle(mass, new Vector(xStart,yStart));
 
+        int fitness=4000;
+        int lastAngle=0;
+        double lastPosX = physicObject.position.x;
+        double lastPosY = physicObject.position.y;
+
         for(int i=0 ; i<individual.getGenes().size() ; i++){
-
-
-            int currentFitness = fitness;
 
             physicObject.netForce = new Vector(gForceMars.x, gForceMars.y);
             double elapsedTime = 1;
@@ -24,10 +23,48 @@ public class FitnessCalc {
             physicObject.rotate(individual.getGenes().getTerm(i)[1]);
             physicObject.update(elapsedTime);
 
+            if(Vector.isLineCrossingOther(new Vector(lastPosX,lastPosY),physicObject.position,Main.groundCoord)) {
 
-            fitness+=physicObject.velocity.y;
+                if(physicObject.position.x < Main.groundStart.x) {
+                    fitness+=(Main.groundStart.x-physicObject.position.x);
+                } else if(physicObject.position.x >Main.groundEnd.x) {
+                    fitness+=(physicObject.position.x-Main.groundEnd.x);
+                } else {
+                    fitness-=1000;
+                }
+
+                if(physicObject.velocity.y > SpaceShuttle.MAX_LANDING_VSPEED) {
+                    fitness += physicObject.velocity.y;
+                } else {
+                    fitness-=1000;
+                }
+
+                if(physicObject.velocity.x > SpaceShuttle.MAX_LANDING_HSPEED) {
+                    fitness += physicObject.velocity.x;
+                } else {
+                    fitness-=1000;
+                }
 
 
+                if(lastAngle == 0 && physicObject.angle == 0) {
+                    fitness-=1000;
+                } else {
+                    fitness += Math.abs(physicObject.angle) + Math.abs(lastAngle);
+                }
+
+                return fitness;
+
+            }
+
+
+            if(physicObject.position.y > 768 && physicObject.position.x < 0) {
+                return 10000;
+            }else if(physicObject.position.y > 768 && physicObject.position.x > 1368) {
+                return 10000;
+            }
+
+            lastPosX = physicObject.position.x;
+            lastPosY = physicObject.position.y;
             lastAngle=physicObject.angle;
 
         }

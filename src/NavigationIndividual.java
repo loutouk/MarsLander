@@ -2,10 +2,9 @@ import java.util.Random;
 
 public class NavigationIndividual extends Individual {
 
-    public static final int MAX_INSTRUCTIONS = 40;
+    public static final int MAX_INSTRUCTIONS = 50;
     private NavigationInstructions genes;
     private double fitness = -1;
-    private int landingTime = MAX_INSTRUCTIONS-1;
 
     public NavigationIndividual() {
 
@@ -216,9 +215,5 @@ public class NavigationIndividual extends Individual {
 
     public NavigationInstructions getGenes() {
         return genes;
-    }
-
-    public int getLandingTime() {
-        return landingTime;
     }
 }

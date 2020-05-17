@@ -1,5 +1,4 @@
-import java.util.Comparator;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Population {
 
@@ -22,10 +21,6 @@ public class Population {
         }
     }
 
-    public void computeFitness() {
-
-    }
-
     /* Getters */
     public Individual getIndividual(int index) {
         return individuals[index];
@@ -33,7 +28,7 @@ public class Population {
 
     public Individual[] getFittest(int n) {
 
-        TreeSet<Individual> fittests = new TreeSet<>(new Comparator<Individual>() {
+        Collections.sort(Arrays.asList(individuals), new Comparator<Individual>() {
             @Override
             public int compare(Individual o1, Individual o2) {
                 double o1Fit = o1.getFitness();
@@ -48,14 +43,9 @@ public class Population {
             }
         });
 
-        // Loop through individuals to find fittest
-        for (int i = 0; i < size(); i++) {
-            fittests.add(getIndividual(i));
-        }
-
         Individual[] nFittests = new Individual[n];
         for(int i=0 ; i<n ; i++){
-            nFittests[i] = fittests.pollFirst();
+            nFittests[i] = individuals[i];
         }
         return nFittests;
     }

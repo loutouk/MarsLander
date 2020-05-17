@@ -2,23 +2,22 @@ public class Algorithm {
 
     /* GA parameters */
 
-    public static final int popSize = 500;
-    public static final double uniformRate = 0.5;
-    public static final double mutationRate = 0.10;
-    public static final int tournamentSize = 2;
+    public static final int popSize = 1000;
+    public static final double uniformRate = 0.50;
+    public static final double mutationRate = 0.060;
+    public static final int tournamentSize = 5;
     public static final boolean elitism = true;
-    public static final int elitismCount = 20;
-    public static int generationCount = 500;
+    public static final int elitismCount = 10;
+    public static int generationCount = 50;
 
     /* Public methods */
 
     // Evolve a population
     public static Population evolvePopulation(Population pop) {
+
         Population newPopulation = new Population(pop.size(), false);
 
-        pop.computeFitness();
-
-        // Keep our best individual
+        // Keep our best individualSystem
         if (elitism) {
             Individual[] elits = pop.getFittest(elitismCount);
             for(int i=0 ; i<elits.length ; i++) {
