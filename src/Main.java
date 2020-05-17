@@ -72,10 +72,23 @@ public class Main {
         groundCoord.add(new Vector(1300,500));
         groundCoord.add(new Vector(1350,450));*/
 
+        /*groundCoord.add(new Vector(0,900));
+        groundCoord.add(new Vector(400,700));
+        groundCoord.add(new Vector(1000 ,550));
+        groundCoord.add(new Vector(2000,550));*/
+
         groundCoord.add(new Vector(0,900));
         groundCoord.add(new Vector(400,700));
+        groundCoord.add(new Vector(420,200));
+        groundCoord.add(new Vector(440,200));
+        groundCoord.add(new Vector(460,700));
+        groundCoord.add(new Vector(960,720));
+        groundCoord.add(new Vector(980,300));
+        groundCoord.add(new Vector(995,300));
         groundCoord.add(new Vector(1000 ,650));
         groundCoord.add(new Vector(2000,650));
+        groundCoord.add(new Vector(1150,200));
+        groundCoord.add(new Vector(1400,300));
 
         /*groundCoord.add(new Vector(0,750));
         groundCoord.add(new Vector(100,650));
@@ -83,8 +96,9 @@ public class Main {
         groundCoord.add(new Vector(300,450));
         groundCoord.add(new Vector(400,450));
         groundCoord.add(new Vector(800,400));
-        groundCoord.add(new Vector(1000,250));
-        groundCoord.add(new Vector(2000,250));*/
+        groundCoord.add(new Vector(1000,200));
+        groundCoord.add(new Vector(2000,200));*/
+
         return groundCoord;
     }
 

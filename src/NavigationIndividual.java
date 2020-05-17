@@ -2,7 +2,7 @@ import java.util.Random;
 
 public class NavigationIndividual extends Individual {
 
-    public static final int MAX_INSTRUCTIONS = 50;
+    public static final int MAX_INSTRUCTIONS = 100;
     private NavigationInstructions genes;
     private double fitness = -1;
 
@@ -194,7 +194,8 @@ public class NavigationIndividual extends Individual {
     public int generateThrust(int lastThrustValue) {
         // thrust value should be an int between 0 and 4
         // its value can only be changed by one at a time
-        int thrustChange;
+        int thrustChange=0;
+
         if(lastThrustValue==0) {
             thrustChange = new Random().nextInt(SpaceShuttle.MAX_THRUST_CHANGE+1);
         }else{
@@ -202,14 +203,18 @@ public class NavigationIndividual extends Individual {
         }
         lastThrustValue += thrustChange;
         lastThrustValue = Math.min(SpaceShuttle.MAX_THRUST_VALUE,Math.max(0,lastThrustValue));
+
         return lastThrustValue;
     }
 
     public int generateAngle(int lastAngleValue) {
         // angle should be an int with no more than 15 degrees difference from last time period
-        int angleChange = new Random().nextInt(SpaceShuttle.MAX_ANLGE_CHANGE*2+1)-SpaceShuttle.MAX_ANLGE_CHANGE;
-        lastAngleValue += angleChange;
-        return lastAngleValue;
+        int angleChange = 0;
+        if(new Random().nextDouble()>0.99) {
+            angleChange = new Random().nextInt(SpaceShuttle.MAX_ANLGE_CHANGE*2+1)-SpaceShuttle.MAX_ANLGE_CHANGE;
+        }
+
+        return lastAngleValue + angleChange;
     }
 
 
