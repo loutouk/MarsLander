@@ -6,6 +6,14 @@ public class NavigationIndividual extends Individual {
     private NavigationInstructions genes;
     private double fitness = -1;
 
+    // Angle change is capped by a constant (15 degrees) so rotation is often done under several turns
+    // and a typical behaviour for the shuttle is to maintain its rotation for many turns
+    // and then rotate for fewer turns
+    // rotation probability should be low, but heighten when we just previously rotate
+    public static final double CHANGE_ANGLE_PROB = 0.01;
+    public static final double CHANGE_ANGLE_AGAIN_PROB = 0.85;
+    public static boolean hasRotated = true; // the initial value will foster or not change in rotation
+
     public NavigationIndividual() {
 
         int[][] array = new int[MAX_INSTRUCTIONS][2];
@@ -210,7 +218,16 @@ public class NavigationIndividual extends Individual {
     public int generateAngle(int lastAngleValue) {
         // angle should be an int with no more than 15 degrees difference from last time period
         int angleChange = 0;
-        if(new Random().nextDouble()>0.99) {
+        boolean hasRotatedSave = hasRotated;
+        hasRotated = false;
+
+        if(hasRotatedSave) {
+            if(new Random().nextDouble()<CHANGE_ANGLE_AGAIN_PROB) {
+                hasRotated = true;
+                angleChange = new Random().nextInt(SpaceShuttle.MAX_ANLGE_CHANGE * 2 + 1) - SpaceShuttle.MAX_ANLGE_CHANGE;
+            }
+        } else if(new Random().nextDouble()<CHANGE_ANGLE_PROB) {
+            hasRotated = true;
             angleChange = new Random().nextInt(SpaceShuttle.MAX_ANLGE_CHANGE*2+1)-SpaceShuttle.MAX_ANLGE_CHANGE;
         }
 

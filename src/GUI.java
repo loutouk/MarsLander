@@ -25,13 +25,17 @@ public class GUI extends JPanel {
         g.setFont(monoFont);
         g.setColor(whiteColor);
         g.drawString("TIME:" + String.format("%.2f", Main.time) + " sec", 50,100);
-        g.drawString("ALTITUDE:" + String.format("%.2f", physicObject.position.y), 50,125);
-        g.drawString("POSITION:" + String.format("%.2f", physicObject.position.x), 50,150);
-        g.drawString("FUEL: " + physicObject.fuel, 50,350);
-        g.drawString("V SPEED:" + String.format("%.2f", physicObject.velocity.y), 50,375);
-        g.drawString("H SPEED:" + String.format("%.2f", physicObject.velocity.x), 50,400);
-        g.drawString("TOUCH DOWN:" + Main.hasTouchGround, 50,500);
-        g.drawString("ANGLE:" + physicObject.angle, 50,550);
+        g.drawString("ALTITUDE:" + String.format("%.2f", physicObject.position.y), 50,150);
+        g.drawString("POSITION:" + String.format("%.2f", physicObject.position.x), 50,175);
+        g.drawString("V SPEED:" + String.format("%.2f", physicObject.velocity.y), 50,225);
+        g.drawString("H SPEED:" + String.format("%.2f", physicObject.velocity.x), 50,250);
+
+        g.drawString("ANGLE:" + physicObject.angle, 50,300);
+        g.drawString("THRUST:" + physicObject.lastThrust, 50,325);
+        g.drawString("TOUCH DOWN:" + Main.hasTouchGround, 50,350);
+        g.drawString("FUEL: " + physicObject.fuel, 50,375);
+
+        g.drawString("GENERATION COUNT: " + Main.generationCount, 50,450);
 
         g.setColor(Color.red);
         for(int i=1 ; i<groundCoordinates.size() ; i++){
@@ -42,7 +46,9 @@ public class GUI extends JPanel {
         gImg.setColor(Color.ORANGE);
         gImg.rotate(Math.toRadians(physicObject.angle),physicObject.position.x,physicObject.position.y);
         gImg.drawImage(landerImage,((int)physicObject.position.x)-landerImage.getWidth(null)/2, ((int)(physicObject.position.y))-landerImage.getHeight(null), null);
-        gImg.fillRect((int)physicObject.position.x-2, (int)(physicObject.position.y),4,(int)physicObject.lastThrust*10);
+        if(!Main.hasTouchGround) {
+            gImg.fillRect((int)physicObject.position.x-2, (int)(physicObject.position.y),4,(int)physicObject.lastThrust*10);
+        }
     }
 
     public GUI(SpaceShuttle physicObject, ArrayList<Vector> groundCoordinates){

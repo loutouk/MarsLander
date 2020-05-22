@@ -1,14 +1,11 @@
 
 public class FitnessCalc {
 
-    static double mass = Main.mass;
-    static double xStart = Main.xStart;
-    static double yStart = Main.yStart;
-    static Vector gForceMars = Main.gForceMars;
-
     static double getFitness(NavigationIndividual individual) {
 
-        SpaceShuttle physicObject = new SpaceShuttle(mass, new Vector(xStart,yStart));
+        SpaceShuttle physicObject = new SpaceShuttle(Main.mass,
+                new Vector(Main.initialPos.x, Main.initialPos.y),
+                new Vector(Main.initialVelocity.x,Main.initialVelocity.y));
 
         int fitness=4000;
         int lastAngle=0;
@@ -17,7 +14,7 @@ public class FitnessCalc {
 
         for(int i=0 ; i<individual.getGenes().size() ; i++){
 
-            physicObject.netForce = new Vector(gForceMars.x, gForceMars.y);
+            physicObject.netForce = new Vector(Main.gForceMars.x, Main.gForceMars.y);
             double elapsedTime = 1;
             physicObject.thrust(individual.getGenes().getTerm(i)[0]);
             physicObject.rotate(individual.getGenes().getTerm(i)[1]);

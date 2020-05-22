@@ -15,6 +15,10 @@ public class SpaceShuttle extends PhysicObject {
         super(mass, position);
     }
 
+    public SpaceShuttle(double mass, Vector position, Vector velocity) {
+        super(mass, position, velocity, new Vector(0.0,0.0));
+    }
+
     public void rotate(int angle){
         this.angle = this.angle + angle;
     }

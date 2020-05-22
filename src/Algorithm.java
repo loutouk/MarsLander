@@ -2,13 +2,14 @@ public class Algorithm {
 
     /* GA parameters */
 
-    public static final int popSize = 1000;
+    public static int generationCount = 200;
+    public static final int popSize = 500;
     public static final double uniformRate = 0.50;
-    public static final double mutationRate = 0.1;
+    public static final double mutationRate = 0.10;
     public static final int tournamentSize = 10;
     public static final boolean elitism = false;
     public static final int elitismCount = 0;
-    public static int generationCount = 200;
+
 
     /* Public methods */
 

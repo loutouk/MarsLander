@@ -6,12 +6,17 @@ public class Main {
     public static Vector groundStart;
     public static Vector groundEnd;
     public static double time = 0;
-    public static double mass = 1;
+    public static double mass = 1.0;
     public static double xStart = 500;
     public static double yStart = 50;
+    public static double xVelStart = 0.0;
+    public static double yVelStart = 0.0;
     public static boolean hasTouchGround = false;
-    public static Vector gForceMars = new Vector(0, 3.711*mass);
+    public static Vector gForceMars = new Vector(1.0*mass, 3.711*mass);
+    public static Vector initialPos = new Vector(xStart, yStart);
+    public static Vector initialVelocity = new Vector(xVelStart*mass, yVelStart*mass);
     public static ArrayList<Vector> groundCoord;
+    public static int generationCount = 0;
 
     public static void main(String[] args){
 
@@ -33,7 +38,7 @@ public class Main {
         }
 
 
-        SpaceShuttle physicObject = new SpaceShuttle(mass, new Vector(xStart,yStart));
+        SpaceShuttle physicObject = new SpaceShuttle(mass, initialPos, initialVelocity);
         GUIFrame f = new GUIFrame("Mars Lander", physicObject);
         GUI gui = new GUI(physicObject, groundCoord);
         f.getContentPane().add(gui);
@@ -55,7 +60,10 @@ public class Main {
             time+=elapsedTime;
             physicObject.update(elapsedTime);
             f.repaint();
-            if(Vector.isLineCrossingOther(new Vector(lastPosX,lastPosY),physicObject.position,groundCoord)) break;
+            if(Vector.isLineCrossingOther(new Vector(lastPosX,lastPosY),physicObject.position,groundCoord)) {
+                hasTouchGround = true;
+                break;
+            }
             lastPosX = physicObject.position.x;
             lastPosY = physicObject.position.y;
         }
@@ -115,7 +123,7 @@ public class Main {
             Population myPop = new Population(Algorithm.popSize, true);
 
             // Evolve our population until we reach an optimum solution
-            int generationCount = 0;
+            generationCount = 0;
             while (generationCount < Algorithm.generationCount && Math.round(myPop.getFittest(1)[0].getFitness()) != 0) {
                 generationCount++;
                 //System.out.println("Generation: " + generationCount + " Fittest: " + myPop.getFittest().getFitness());
@@ -124,8 +132,7 @@ public class Main {
                 myPop = Algorithm.evolvePopulation(myPop);
             }
             if (Math.round(myPop.getFittest(1)[0].getFitness()) == 0) {
-
-                System.out.println("Solution found!");
+                System.out.println("Solution found! Generation " + generationCount);
                 return (NavigationIndividual) myPop.getFittest(1)[0];
             } else {
                 System.out.println("No solution found. Best result:");
