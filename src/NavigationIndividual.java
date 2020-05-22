@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Random;
 
 public class NavigationIndividual extends Individual {
@@ -13,6 +14,8 @@ public class NavigationIndividual extends Individual {
     public static final double CHANGE_ANGLE_PROB = 0.01;
     public static final double CHANGE_ANGLE_AGAIN_PROB = 0.85;
     public static boolean hasRotated = true; // the initial value will foster or not change in rotation
+
+    public HashSet<Integer> achievedGoals = new HashSet<>();
 
     public NavigationIndividual() {
 
@@ -92,7 +95,7 @@ public class NavigationIndividual extends Individual {
 
         if(index==0) {
             if( Math.abs(a.getGene(index+1)[0] - b.getGene(index)[0])<=SpaceShuttle.MAX_THRUST_CHANGE &&
-                    Math.abs(a.getGene(index+1)[1] - b.getGene(index)[1])<=SpaceShuttle.MAX_ANLGE_CHANGE) {
+                    Math.abs(a.getGene(index+1)[1] - b.getGene(index)[1])<=SpaceShuttle.MAX_ANGLE_CHANGE) {
                 return true;
             } else {
                 return false;
@@ -101,7 +104,7 @@ public class NavigationIndividual extends Individual {
 
         if(index==a.genes.size()-1) {
             if( Math.abs(a.getGene(index-1)[0] - b.getGene(index)[0])<=SpaceShuttle.MAX_THRUST_CHANGE &&
-                Math.abs(a.getGene(index-1)[1] - b.getGene(index)[1])<=SpaceShuttle.MAX_ANLGE_CHANGE) {
+                Math.abs(a.getGene(index-1)[1] - b.getGene(index)[1])<=SpaceShuttle.MAX_ANGLE_CHANGE) {
                 return true;
             } else {
                 return false;
@@ -110,8 +113,8 @@ public class NavigationIndividual extends Individual {
 
         else if( Math.abs(a.getGene(index-1)[0] - b.getGene(index)[0])<=SpaceShuttle.MAX_THRUST_CHANGE &&
             Math.abs(a.getGene(index+1)[0] - b.getGene(index)[0])<=SpaceShuttle.MAX_THRUST_CHANGE &&
-            Math.abs(a.getGene(index-1)[1] - b.getGene(index)[1])<=SpaceShuttle.MAX_ANLGE_CHANGE &&
-            Math.abs(a.getGene(index+1)[1] - b.getGene(index)[1])<=SpaceShuttle.MAX_ANLGE_CHANGE) {
+            Math.abs(a.getGene(index-1)[1] - b.getGene(index)[1])<=SpaceShuttle.MAX_ANGLE_CHANGE &&
+            Math.abs(a.getGene(index+1)[1] - b.getGene(index)[1])<=SpaceShuttle.MAX_ANGLE_CHANGE) {
             return true;
         }
 
@@ -178,25 +181,23 @@ public class NavigationIndividual extends Individual {
                 }
 
                 // change angle if possible
-                if(Math.abs(angleAfter-angleBefore)*2<SpaceShuttle.MAX_ANLGE_CHANGE) {
+                if(Math.abs(angleAfter-angleBefore)*2<SpaceShuttle.MAX_ANGLE_CHANGE) {
                     // TODO picking a wider range is possible
                     int leftDif = Math.abs(getGene(i)[1]-angleBefore);
                     int rightDif =Math.abs(getGene(i)[1]-angleAfter);
-                    // TODO find why Math.abs(getGene(i)[1]-angleBefore) is sometimes > MAX_ANLGE_CHANGE
-                    int possibleRange = Math.max(0,SpaceShuttle.MAX_ANLGE_CHANGE - Math.max(leftDif,rightDif));
+                    // TODO find why Math.abs(getGene(i)[1]-angleBefore) is sometimes > MAX_ANGLE_CHANGE
+                    int possibleRange = Math.max(0,SpaceShuttle.MAX_ANGLE_CHANGE - Math.max(leftDif,rightDif));
                     int angleChange = new Random().nextInt(possibleRange*2 + 1) - possibleRange;
                     newAngle = getGene(i)[1]+angleChange;
                 }
 
-
                 array[0] = newThrust;
                 array[1] = newAngle;
 
-                if(Math.abs(newAngle-getGene(i)[1])>15) System.out.println("a");
-                if(Math.abs(newThrust-getGene(i)[0])>1) System.out.println("b");
                 this.setGene(i, array);
             }
         }
+
     }
 
     public int generateThrust(int lastThrustValue) {
@@ -224,11 +225,11 @@ public class NavigationIndividual extends Individual {
         if(hasRotatedSave) {
             if(new Random().nextDouble()<CHANGE_ANGLE_AGAIN_PROB) {
                 hasRotated = true;
-                angleChange = new Random().nextInt(SpaceShuttle.MAX_ANLGE_CHANGE * 2 + 1) - SpaceShuttle.MAX_ANLGE_CHANGE;
+                angleChange = new Random().nextInt(SpaceShuttle.MAX_ANGLE_CHANGE * 2 + 1) - SpaceShuttle.MAX_ANGLE_CHANGE;
             }
         } else if(new Random().nextDouble()<CHANGE_ANGLE_PROB) {
             hasRotated = true;
-            angleChange = new Random().nextInt(SpaceShuttle.MAX_ANLGE_CHANGE*2+1)-SpaceShuttle.MAX_ANLGE_CHANGE;
+            angleChange = new Random().nextInt(SpaceShuttle.MAX_ANGLE_CHANGE*2+1)-SpaceShuttle.MAX_ANGLE_CHANGE;
         }
 
         return lastAngleValue + angleChange;

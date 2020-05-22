@@ -38,9 +38,9 @@ public class Vector {
         return result;
     }
 
-    public static boolean isLineCrossingOther(Vector a, Vector b, ArrayList<Vector> lines) {
-        for(int i=1 ; i<lines.size() ; i++) if(doIntersect(a,b,lines.get(i-1),lines.get(i))) return true;
-        return false;
+    public static Vector isLineCrossingOther(Vector a, Vector b, ArrayList<Vector> lines) {
+        for(int i=1 ; i<lines.size() ; i++) if(doIntersect(a,b,lines.get(i-1),lines.get(i))) return lines.get(i-1);
+        return null;
     }
 
     // Given three colinear points p, q, r, the function checks if point q lies on line segment 'pr'

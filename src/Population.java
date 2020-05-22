@@ -31,8 +31,10 @@ public class Population {
         Collections.sort(Arrays.asList(individuals), new Comparator<Individual>() {
             @Override
             public int compare(Individual o1, Individual o2) {
+
                 double o1Fit = o1.getFitness();
                 double o2Fit = o2.getFitness();
+
                 if(o1Fit>o2Fit) {
                     return 1;
                 } else if(o1Fit<o2Fit) {

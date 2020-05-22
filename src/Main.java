@@ -60,7 +60,7 @@ public class Main {
             time+=elapsedTime;
             physicObject.update(elapsedTime);
             f.repaint();
-            if(Vector.isLineCrossingOther(new Vector(lastPosX,lastPosY),physicObject.position,groundCoord)) {
+            if(Vector.isLineCrossingOther(new Vector(lastPosX,lastPosY),physicObject.position,groundCoord)!=null) {
                 hasTouchGround = true;
                 break;
             }
@@ -87,15 +87,14 @@ public class Main {
 
         groundCoord.add(new Vector(0,900));
         groundCoord.add(new Vector(400,700));
-        groundCoord.add(new Vector(420,200));
-        groundCoord.add(new Vector(440,200));
-        groundCoord.add(new Vector(460,700));
-        groundCoord.add(new Vector(960,720));
-        groundCoord.add(new Vector(980,300));
-        groundCoord.add(new Vector(995,300));
+        groundCoord.add(new Vector(750,200));
+        groundCoord.add(new Vector(775,150));
+        groundCoord.add(new Vector(800,700));
+        groundCoord.add(new Vector(920,720));
+        groundCoord.add(new Vector(995,290));
         groundCoord.add(new Vector(1000 ,650));
         groundCoord.add(new Vector(2000,650));
-        groundCoord.add(new Vector(1150,200));
+        groundCoord.add(new Vector(1050,220));
         groundCoord.add(new Vector(1400,300));
 
         /*groundCoord.add(new Vector(0,750));

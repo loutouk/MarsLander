@@ -1,14 +1,17 @@
+import java.util.HashMap;
+import java.util.HashSet;
+
 public class Algorithm {
 
     /* GA parameters */
 
-    public static int generationCount = 200;
+    public static int generationCount = 250;
     public static final int popSize = 500;
     public static final double uniformRate = 0.50;
     public static final double mutationRate = 0.10;
     public static final int tournamentSize = 10;
-    public static final boolean elitism = false;
-    public static final int elitismCount = 0;
+    public static final boolean elitism = true;
+    public static final int elitismCount = 20;
 
 
     /* Public methods */
@@ -16,9 +19,10 @@ public class Algorithm {
     // Evolve a population
     public static Population evolvePopulation(Population pop) {
 
+
         Population newPopulation = new Population(pop.size(), false);
 
-        // Keep our best individualSystem
+        // Keep our best individual
         if (elitism) {
             Individual[] elits = pop.getFittest(elitismCount);
             for(int i=0 ; i<elits.length ; i++) {
