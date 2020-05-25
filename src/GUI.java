@@ -8,6 +8,12 @@ import java.util.ArrayList;
 
 public class GUI extends JPanel {
 
+    private static final int displayOffset = 10;
+
+    // Tinker with those variables to have the landscape fit your screen
+    private static final double displayDividingFactor = 5.2;
+    private static final int screenHeight = 768 - displayOffset;
+
     private Image landerImage;
 
     private SpaceShuttle physicObject;
@@ -38,16 +44,31 @@ public class GUI extends JPanel {
         g.drawString("GENERATION COUNT: " + Main.generationCount, 50,450);
 
         g.setColor(Color.red);
+
         for(int i=1 ; i<groundCoordinates.size() ; i++){
-            g.drawLine( (int)groundCoordinates.get(i-1).x, (int)groundCoordinates.get(i-1).y,
-                    (int)groundCoordinates.get(i).x,(int)groundCoordinates.get(i).y);
+            g.drawLine( (int)(groundCoordinates.get(i-1).x/displayDividingFactor),
+                        (int)(screenHeight-(groundCoordinates.get(i-1).y/displayDividingFactor)),
+                        (int)(groundCoordinates.get(i).x/displayDividingFactor),
+                        (int)(screenHeight-(groundCoordinates.get(i).y/displayDividingFactor)));
         }
+
         final Graphics2D gImg = (Graphics2D)g;
+
         gImg.setColor(Color.ORANGE);
-        gImg.rotate(Math.toRadians(physicObject.angle),physicObject.position.x,physicObject.position.y);
-        gImg.drawImage(landerImage,((int)physicObject.position.x)-landerImage.getWidth(null)/2, ((int)(physicObject.position.y))-landerImage.getHeight(null), null);
+        gImg.rotate(Math.toRadians(physicObject.angle),
+                (int)(physicObject.position.x/displayDividingFactor),
+                (int)(screenHeight-(physicObject.position.y/displayDividingFactor)));
+
+        gImg.drawImage(landerImage,
+                ((int)(physicObject.position.x/displayDividingFactor))-landerImage.getWidth(null)/2,
+                ((int)(screenHeight-(physicObject.position.y/displayDividingFactor)))-landerImage.getHeight(null), null);
+
         if(!Main.hasTouchGround) {
-            gImg.fillRect((int)physicObject.position.x-2, (int)(physicObject.position.y),4,(int)physicObject.lastThrust*10);
+            gImg.fillRect(
+                    ((int)(physicObject.position.x/displayDividingFactor))-2,
+                    ((int)(screenHeight-(physicObject.position.y/displayDividingFactor))),
+                    4,
+                    (int)physicObject.lastThrust*10);
         }
     }
 

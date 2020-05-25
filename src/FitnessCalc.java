@@ -1,11 +1,11 @@
-
 public class FitnessCalc {
 
     static double getFitness(NavigationIndividual individual) {
 
         SpaceShuttle physicObject = new SpaceShuttle(Main.mass,
                 new Vector(Main.initialPos.x, Main.initialPos.y),
-                new Vector(Main.initialVelocity.x,Main.initialVelocity.y));
+                new Vector(Main.initialVelocity.x,Main.initialVelocity.y),
+                Main.initialRotation);
 
         int fitness=5000;
         int lastAngle=0;
@@ -38,40 +38,43 @@ public class FitnessCalc {
                 }
 
                 int yDifference = (int) (Main.groundStart.y-lastPosY);
-                if(yDifference<0){
-                    fitness-=yDifference;
+                if(yDifference>=0 || yDifference<SpaceShuttle.MAX_LANDING_VSPEED){
+                    fitness+=yDifference;
                 } else{
                     fulfilledBasics++;
                     fitness-=1000;
                 }
 
-                if(fulfilledBasics<2 || physicObject.velocity.y > SpaceShuttle.MAX_LANDING_VSPEED) {
-                    fitness += physicObject.velocity.y;
+                if(fulfilledBasics<2 || physicObject.velocity.y < SpaceShuttle.MAX_LANDING_VSPEED) {
+                    fitness -= physicObject.velocity.y;
                 } else {
                     fitness-=1000;
+                    fulfilledBasics++;
                 }
 
-                if(fulfilledBasics<2 || physicObject.velocity.x > SpaceShuttle.MAX_LANDING_HSPEED) {
-                    fitness += physicObject.velocity.x;
+                if(fulfilledBasics<3 || Math.abs(physicObject.velocity.x) > SpaceShuttle.MAX_LANDING_HSPEED) {
+                    fitness += Math.abs(physicObject.velocity.x);
                 } else {
                     fitness-=1000;
+                    fulfilledBasics++;
                 }
 
-                if(fulfilledBasics>=2 && lastAngle == 0 && physicObject.angle == 0) {
+                if(fulfilledBasics>=4 && lastAngle == 0 && physicObject.angle == 0) {
                     fitness-=1000;
                 } else {
                     fitness += Math.abs(physicObject.angle) + Math.abs(lastAngle);
                 }
 
+                if(fitness>0) fitness -= physicObject.velocity.y;
+
                 return fitness;
 
             }
 
-
-            // TODO replace 768 and 1368 by max ground coordinate values
-            if(physicObject.position.y > 768 && physicObject.position.x < 0) {
-                return 10000;
-            }else if(physicObject.position.y > 768 && physicObject.position.x > 1368) {
+            // detect and punish shuttle going out of screen
+            if(     physicObject.position.x<0 ||
+                    physicObject.position.x>6999 ||
+                    physicObject.position.y<0) {
                 return 10000;
             }
 

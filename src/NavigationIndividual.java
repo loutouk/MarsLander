@@ -1,9 +1,9 @@
-import java.util.HashSet;
 import java.util.Random;
 
 public class NavigationIndividual extends Individual {
 
-    public static final int MAX_INSTRUCTIONS = 100;
+    // How long can it take to reach a solution (the longest/worst)
+    public static final int MAX_INSTRUCTIONS = 300;
     private NavigationInstructions genes;
     private double fitness = -1;
 
@@ -14,8 +14,6 @@ public class NavigationIndividual extends Individual {
     public static final double CHANGE_ANGLE_PROB = 0.01;
     public static final double CHANGE_ANGLE_AGAIN_PROB = 0.85;
     public static boolean hasRotated = true; // the initial value will foster or not change in rotation
-
-    public HashSet<Integer> achievedGoals = new HashSet<>();
 
     public NavigationIndividual() {
 

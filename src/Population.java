@@ -4,9 +4,6 @@ public class Population {
 
     Individual[] individuals;
 
-    /*
-     * Constructors
-     */
     // Create a population
     public Population(int populationSize, boolean initialise) {
         individuals = new Individual[populationSize];
@@ -21,7 +18,6 @@ public class Population {
         }
     }
 
-    /* Getters */
     public Individual getIndividual(int index) {
         return individuals[index];
     }
@@ -52,13 +48,10 @@ public class Population {
         return nFittests;
     }
 
-    /* Public methods */
-    // Get population size
     public int size() {
         return individuals.length;
     }
 
-    // Save individual
     public void saveIndividual(int index, Individual indiv) {
         individuals[index] = indiv;
     }

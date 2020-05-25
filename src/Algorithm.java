@@ -1,11 +1,6 @@
-import java.util.HashMap;
-import java.util.HashSet;
-
 public class Algorithm {
 
-    /* GA parameters */
-
-    public static int generationCount = 250;
+    public static int generationCount = 300;
     public static final int popSize = 500;
     public static final double uniformRate = 0.50;
     public static final double mutationRate = 0.10;
@@ -14,11 +9,7 @@ public class Algorithm {
     public static final int elitismCount = 20;
 
 
-    /* Public methods */
-
-    // Evolve a population
     public static Population evolvePopulation(Population pop) {
-
 
         Population newPopulation = new Population(pop.size(), false);
 
