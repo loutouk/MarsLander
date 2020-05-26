@@ -25,6 +25,22 @@ public class GUI extends JPanel {
         update(g);
     }
 
+    public void drawPath(PhysicObject shuttle, int lastPosX, int lastPosY, int generationCount){
+        Graphics g = this.getGraphics();
+
+        g.setColor( new Color(
+                    0,
+                    Math.min(255,Math.abs((int)Math.abs(shuttle.velocity.x)*4)),
+                    Math.min(255,Math.abs((int)Math.abs(shuttle.velocity.y)*4))));
+
+        g.drawLine( (int)(shuttle.position.x/displayDividingFactor),
+                (int)(screenHeight-(shuttle.position.y/displayDividingFactor)),
+                (int)(lastPosX/displayDividingFactor),
+                (int)(screenHeight-(lastPosY/displayDividingFactor)));
+
+
+    }
+
     public void update(Graphics g) {
         g.setColor(Color.black);
         g.fillRect(0,0,1400,800);

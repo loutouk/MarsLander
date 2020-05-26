@@ -1,13 +1,12 @@
 public class Algorithm {
 
-    public static int generationCount = 250;
+    public static final int generationCount = 200;
     public static final int popSize = 500;
     public static final double uniformRate = 0.50;
-    public static final double mutationRate = 0.04;
     public static final int tournamentSize = 10;
     public static final boolean elitism = true;
     public static final int elitismCount = 20;
-
+    public static double mutationRate = 0.04;
 
     public static Population evolvePopulation(Population pop) {
 
@@ -39,6 +38,7 @@ public class Algorithm {
             Individual newIndiv = indiv1.crossover(indiv2);
             newPopulation.saveIndividual(i, newIndiv);
         }
+
 
         // Mutate population
         for (int i = elitismOffset; i < pop.size(); i++) {
