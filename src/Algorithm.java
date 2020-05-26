@@ -1,6 +1,6 @@
 public class Algorithm {
 
-    public static int generationCount = 150;
+    public static int generationCount = 250;
     public static final int popSize = 500;
     public static final double uniformRate = 0.50;
     public static final double mutationRate = 0.04;
