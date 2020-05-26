@@ -31,9 +31,9 @@ public class Population {
                 double o1Fit = o1.getFitness();
                 double o2Fit = o2.getFitness();
 
-                if(o1Fit>o2Fit) {
+                if(o1Fit<o2Fit) {
                     return 1;
-                } else if(o1Fit<o2Fit) {
+                } else if(o1Fit>o2Fit) {
                     return -1;
                 } else {
                     return 0;

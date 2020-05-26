@@ -3,8 +3,8 @@ public class SpaceShuttle extends PhysicObject {
     // By increasing the thrust and angle possible range and max values,
     // it will be easier to find a solution
     public static final int MAX_ANGLE_CHANGE = 15;
-    public static final int MAX_THRUST_CHANGE = 6; // default 1
-    public static final int MAX_THRUST_VALUE = 6; // default 4
+    public static final int MAX_THRUST_CHANGE = 1; // default 1
+    public static final int MAX_THRUST_VALUE = 4; // default 4
     public static final int MAX_LANDING_VSPEED = -40;
     public static final int MAX_LANDING_HSPEED = 20;
     public static final int MIN_LANDING_WIDTH = 1000;

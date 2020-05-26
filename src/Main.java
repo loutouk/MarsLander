@@ -247,11 +247,11 @@ public class Main {
 
         // Evolve our population until we reach an optimum solution
         generationCount = 0;
-        while (generationCount < Algorithm.generationCount && Math.round(myPop.getFittest(1)[0].getFitness()) != 0) {
+        while (generationCount < Algorithm.generationCount && Math.round(myPop.getFittest(1)[0].getFitness()) != FitnessCalc.maxFitness) {
             generationCount++;
             myPop = Algorithm.evolvePopulation(myPop);
         }
-        if (Math.round(myPop.getFittest(1)[0].getFitness()) == 0) {
+        if (Math.round(myPop.getFittest(1)[0].getFitness()) == FitnessCalc.maxFitness) {
             System.out.println("Solution found! Generation " + generationCount);
             return (NavigationIndividual) myPop.getFittest(1)[0];
         } else {

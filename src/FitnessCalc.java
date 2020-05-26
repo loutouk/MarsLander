@@ -1,5 +1,7 @@
 public class FitnessCalc {
 
+    public static final int maxFitness = 5000;
+
     static double getFitness(NavigationIndividual individual) {
 
         SpaceShuttle physicObject = new SpaceShuttle(Main.mass,
@@ -7,7 +9,7 @@ public class FitnessCalc {
                 new Vector(Main.initialVelocity.x,Main.initialVelocity.y),
                 Main.initialRotation);
 
-        int fitness=5000;
+        int fitness=0;
         int lastAngle=0;
         double lastPosX = physicObject.position.x;
         double lastPosY = physicObject.position.y;
@@ -31,51 +33,49 @@ public class FitnessCalc {
             if(startTouchedGround!=null) {
 
                 if(physicObject.position.x < Main.groundStart.x || physicObject.position.x > Main.groundEnd.x) {
-                    fitness+=Math.abs(middleX-physicObject.position.x);
+                    fitness-=Math.abs(middleX-physicObject.position.x);
                 }else{
                     fulfilledBasics++;
-                    fitness-=1000;
+                    fitness+=1000;
                 }
 
-                int yDifference = (int) (Main.groundStart.y-lastPosY);
-                if(yDifference>=0 || yDifference<SpaceShuttle.MAX_LANDING_VSPEED){
-                    fitness+=yDifference;
-                } else{
+                if(startTouchedGround.y == Main.groundStart.y){
                     fulfilledBasics++;
-                    fitness-=1000;
+                    fitness+=1000;
+                } else{
+                    fitness-=Math.abs(physicObject.position.y-Main.groundStart.y);
                 }
 
                 if(fulfilledBasics<2 || physicObject.velocity.y < SpaceShuttle.MAX_LANDING_VSPEED) {
-                    fitness -= physicObject.velocity.y;
+                    fitness += physicObject.velocity.y;
                 } else {
-                    fitness-=1000;
+                    fitness+=1000;
                     fulfilledBasics++;
                 }
 
                 if(fulfilledBasics<3 || Math.abs(physicObject.velocity.x) > SpaceShuttle.MAX_LANDING_HSPEED) {
-                    fitness += Math.abs(physicObject.velocity.x);
+                    fitness -= Math.abs(physicObject.velocity.x);
                 } else {
-                    fitness-=1000;
+                    fitness+=1000;
                     fulfilledBasics++;
                 }
 
+
                 if(fulfilledBasics>=4 && lastAngle == 0 && physicObject.angle == 0) {
-                    fitness-=1000;
-                } else {
-                    fitness += Math.abs(physicObject.angle) + Math.abs(lastAngle);
+                    fitness+=1000;
+                } else if(fulfilledBasics>=4) {
+                    fitness -= Math.abs(physicObject.angle) + Math.abs(lastAngle);
                 }
 
-                if(fitness>0) fitness -= physicObject.velocity.y;
+                // Max landing vSpeed is 40 & 40-8=32 & 32 squared equals 1024 which is equivalent to a basic fulfilment reward
+                // fitness -= Math.pow(physicObject.velocity.y+8,2) is for prompting low vSpeed
+
+                if(fitness<maxFitness && physicObject.velocity.y<0) fitness -= Math.pow(physicObject.velocity.y+8,2);
 
                 return fitness;
 
-            }
-
-            // detect and punish shuttle going out of screen
-            if(     physicObject.position.x<0 ||
-                    physicObject.position.x>6999 ||
-                    physicObject.position.y<0) {
-                return 10000;
+            } else if(physicObject.position.x<0 || physicObject.position.x > 6999) {
+                return - Math.abs(physicObject.position.x-middleX) * 1000;
             }
 
             lastPosX = physicObject.position.x;

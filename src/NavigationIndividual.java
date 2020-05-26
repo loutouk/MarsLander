@@ -14,6 +14,8 @@ public class NavigationIndividual extends Individual {
     public static final double CHANGE_ANGLE_PROB = 0.01;
     public static final double CHANGE_ANGLE_AGAIN_PROB = 0.85;
     public static boolean hasRotated = true; // the initial value will foster or not change in rotation
+    // Because the shuttle must overcome gravity, a use of a high thrust is often required
+    public static final double CHOOSE_LOWER_THRUST_PROB = 0.001;
 
     public NavigationIndividual() {
 
@@ -150,31 +152,38 @@ public class NavigationIndividual extends Individual {
 
                 // change thrust if possible
                 if(Math.abs(thrustAfter-thrustBefore)*2<SpaceShuttle.MAX_THRUST_CHANGE) {
+
+                    int possibleRange = 0;
+                    int thrustChange = 0;
+
                     // can change both right and left values
                     if(     Math.abs(thrustBefore-getGene(i)[0])<SpaceShuttle.MAX_THRUST_CHANGE &&
                             Math.abs(thrustAfter-getGene(i)[0])<SpaceShuttle.MAX_THRUST_CHANGE) {
                         // change right
                         if(new Random().nextInt(2)==0) {
-                            int possibleRange = SpaceShuttle.MAX_THRUST_CHANGE - Math.abs(thrustAfter-getGene(i)[0]);
-                            int thrustChange = new Random().nextInt(possibleRange*2 + 1) - possibleRange;
-                            newThrust = Math.min(SpaceShuttle.MAX_THRUST_VALUE,Math.max(0,getGene(i)[0]+thrustChange));
+                            possibleRange = SpaceShuttle.MAX_THRUST_CHANGE - Math.abs(thrustAfter-getGene(i)[0]);
+                            thrustChange = new Random().nextInt(possibleRange*2 + 1) - possibleRange;
                         }
                         // change left
                         else {
-                            int possibleRange = SpaceShuttle.MAX_THRUST_CHANGE - Math.abs(thrustBefore-getGene(i)[0]);
-                            int thrustChange = new Random().nextInt(possibleRange*2 + 1) - possibleRange;
-                            newThrust = Math.min(SpaceShuttle.MAX_THRUST_VALUE,Math.max(0,getGene(i)[0]+thrustChange));
+                            possibleRange = SpaceShuttle.MAX_THRUST_CHANGE - Math.abs(thrustBefore-getGene(i)[0]);
+                            thrustChange = new Random().nextInt(possibleRange*2 + 1) - possibleRange;
                         }
                     } else if(Math.abs(thrustBefore-getGene(i)[0])<SpaceShuttle.MAX_THRUST_CHANGE) {
                         // can only change left
-                        int possibleRange = SpaceShuttle.MAX_THRUST_CHANGE - Math.abs(thrustBefore-getGene(i)[0]);
-                        int thrustChange = new Random().nextInt(possibleRange*2 + 1) - possibleRange;
-                        newThrust = Math.min(SpaceShuttle.MAX_THRUST_VALUE,Math.max(0,getGene(i)[0]+thrustChange));
-                    } else {
+                        possibleRange = SpaceShuttle.MAX_THRUST_CHANGE - Math.abs(thrustBefore-getGene(i)[0]);
+                        thrustChange = new Random().nextInt(possibleRange*2 + 1) - possibleRange;
+                    } else if(Math.abs(thrustAfter-getGene(i)[0])<SpaceShuttle.MAX_THRUST_CHANGE) {
                         // can only change right
-                        int possibleRange = SpaceShuttle.MAX_THRUST_CHANGE - Math.abs(thrustAfter-getGene(i)[0]);
-                        int thrustChange = new Random().nextInt(possibleRange*2 + 1) - possibleRange;
-                        newThrust = Math.min(SpaceShuttle.MAX_THRUST_VALUE,Math.max(0,getGene(i)[0]+thrustChange));
+                        possibleRange = SpaceShuttle.MAX_THRUST_CHANGE - Math.abs(thrustAfter-getGene(i)[0]);
+                        thrustChange = new Random().nextInt(possibleRange*2 + 1) - possibleRange;
+                    }
+
+                    // foster use of a high trust as it is often required in this problem
+                    if(new Random().nextDouble()<CHOOSE_LOWER_THRUST_PROB){
+                        newThrust = Math.min(SpaceShuttle.MAX_THRUST_VALUE,Math.max(0,getGene(i)[0]+thrustChange)); //rand
+                    }else{
+                        Math.min(SpaceShuttle.MAX_THRUST_VALUE,getGene(i)[0]+possibleRange); // take max value
                     }
                 }
 
@@ -188,6 +197,7 @@ public class NavigationIndividual extends Individual {
                     int angleChange = new Random().nextInt(possibleRange*2 + 1) - possibleRange;
                     newAngle = getGene(i)[1]+angleChange;
                 }
+
 
                 array[0] = newThrust;
                 array[1] = newAngle;
@@ -216,6 +226,7 @@ public class NavigationIndividual extends Individual {
 
     public int generateAngle(int lastAngleValue) {
         // angle should be an int with no more than 15 degrees difference from last time period
+
         int angleChange = 0;
         boolean hasRotatedSave = hasRotated;
         hasRotated = false;

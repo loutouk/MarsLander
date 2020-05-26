@@ -1,9 +1,9 @@
 public class Algorithm {
 
-    public static int generationCount = 300;
+    public static int generationCount = 150;
     public static final int popSize = 500;
     public static final double uniformRate = 0.50;
-    public static final double mutationRate = 0.10;
+    public static final double mutationRate = 0.04;
     public static final int tournamentSize = 10;
     public static final boolean elitism = true;
     public static final int elitismCount = 20;
@@ -29,6 +29,7 @@ public class Algorithm {
         } else {
             elitismOffset = 0;
         }
+
         // Loop over the population size and create new individuals with
         // crossover
 
@@ -40,7 +41,7 @@ public class Algorithm {
         }
 
         // Mutate population
-        for (int i = elitismOffset; i < newPopulation.size(); i++) {
+        for (int i = elitismOffset; i < pop.size(); i++) {
             newPopulation.getIndividual(i).mutate();
         }
 
