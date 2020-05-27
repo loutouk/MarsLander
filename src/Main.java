@@ -26,7 +26,7 @@ public class Main {
 
     public static void main(String[] args){
 
-        groundCoord = generateGround(5);
+        groundCoord = generateGround(7);
 
         // Identify landing zone
         int lastX = (int) groundCoord.get(0).x;
@@ -264,7 +264,6 @@ public class Main {
             groundCoord.add(new Vector(500,150));
             groundCoord.add(new Vector(1000,2000));
             groundCoord.add(new Vector(2000,2000));
-            groundCoord.add(new Vector(2010,1500));
             groundCoord.add(new Vector(2200,800));
             groundCoord.add(new Vector(2500,200));
             groundCoord.add(new Vector(6899,300));
@@ -275,6 +274,26 @@ public class Main {
             groundCoord.add(new Vector(3100,1100));
             groundCoord.add(new Vector(3400,2900));
             groundCoord.add(new Vector(6999,3000));
+        }else if(levelNumber==8){
+            xStart = 6000;
+            yStart = 3000;
+            xVelStart = 0.;
+            yVelStart = 0.0;
+            initialRotation = -50;
+            initialPos = new Vector(xStart, yStart);
+            initialVelocity = new Vector(xVelStart*mass, yVelStart*mass);
+            physicObject = new SpaceShuttle(mass, initialPos, initialVelocity, initialRotation);
+            groundCoord.add(new Vector(0,2500));
+            groundCoord.add(new Vector(100,1000));
+            groundCoord.add(new Vector(2000,800));
+            groundCoord.add(new Vector(2100,100));
+            groundCoord.add(new Vector(3100,100));
+            groundCoord.add(new Vector(3200,1500));
+            groundCoord.add(new Vector(1500,1600));
+            groundCoord.add(new Vector(1500,1800));
+            groundCoord.add(new Vector(4000,1700));
+            groundCoord.add(new Vector(4100,100));
+            groundCoord.add(new Vector(6999,200));
         }else{
             System.err.println("Error. Level " + levelNumber + " is not implemented.");
         }

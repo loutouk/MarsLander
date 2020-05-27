@@ -16,8 +16,6 @@ public class FitnessCalc {
         double lastPosX = physicObject.position.x;
         double lastPosY = physicObject.position.y;
 
-        double middleX = (Main.groundEnd.x + Main.groundStart.x) / 2;
-
         int fulfilledBasics = 0;
 
         for(int i=0 ; i<individual.getGenes().size() ; i++){
@@ -35,7 +33,8 @@ public class FitnessCalc {
             if(startTouchedGround!=null) {
 
                 if(physicObject.position.x < Main.groundStart.x || physicObject.position.x > Main.groundEnd.x) {
-                    fitness-=Math.abs(middleX-physicObject.position.x);
+                    fitness-=Math.min(  Math.abs(Main.groundStart.x-physicObject.position.x),
+                                        Math.abs(Main.groundEnd.x-physicObject.position.x));
                 }else{
                     fulfilledBasics++;
                     fitness+=1000;
@@ -77,7 +76,8 @@ public class FitnessCalc {
                 return fitness;
 
             } else if(physicObject.position.x<0 || physicObject.position.x > 6999) {
-                return - Math.abs(physicObject.position.x-middleX) * 1000;
+                return - Math.min(  Math.abs(Main.groundStart.x-physicObject.position.x),
+                                    Math.abs(Main.groundEnd.x-physicObject.position.x)) * 10000;
             }
 
             lastPosX = physicObject.position.x;
