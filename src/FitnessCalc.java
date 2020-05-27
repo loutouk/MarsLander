@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class FitnessCalc {
 
     public static final int maxFitness = 5000;

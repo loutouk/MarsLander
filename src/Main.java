@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Main {
 
@@ -27,7 +26,7 @@ public class Main {
 
     public static void main(String[] args){
 
-        groundCoord = generateGround(4);
+        groundCoord = generateGround(5);
 
         // Identify landing zone
         int lastX = (int) groundCoord.get(0).x;
@@ -43,9 +42,6 @@ public class Main {
                 }
             }
         }
-
-
-
 
         GUIFrame f = new GUIFrame("Mars Lander", physicObject);
         gui = new GUI(physicObject, groundCoord);
@@ -84,6 +80,7 @@ public class Main {
     }
 
     private static ArrayList<Vector> generateGround(int levelNumber) {
+
         groundCoord = new ArrayList<>();
 
         if(levelNumber==0){
@@ -237,6 +234,47 @@ public class Main {
             groundCoord.add(new Vector(5500  ,500));
             groundCoord.add(new Vector(6200  ,800));
             groundCoord.add(new Vector(6999  ,600));
+        }else if(levelNumber==6){
+            xStart = 6500;
+            yStart = 2800;
+            xVelStart = -90.0;
+            yVelStart = 0.0;
+            initialRotation = -90;
+            initialPos = new Vector(xStart, yStart);
+            initialVelocity = new Vector(xVelStart*mass, yVelStart*mass);
+            physicObject = new SpaceShuttle(mass, initialPos, initialVelocity, initialRotation);
+            groundCoord.add(new Vector(0,100));
+            groundCoord.add(new Vector(1000,500));
+            groundCoord.add(new Vector(1500,1500));
+            groundCoord.add(new Vector(3000,1000));
+            groundCoord.add(new Vector(4000,150));
+            groundCoord.add(new Vector(5500,150));
+            groundCoord.add(new Vector(6999,800));
+        }else if(levelNumber==7){
+            xStart = 6000;
+            yStart = 1500;
+            xVelStart = 0.;
+            yVelStart = 0.0;
+            initialRotation = 0;
+            initialPos = new Vector(xStart, yStart);
+            initialVelocity = new Vector(xVelStart*mass, yVelStart*mass);
+            physicObject = new SpaceShuttle(mass, initialPos, initialVelocity, initialRotation);
+            groundCoord.add(new Vector(0,2500));
+            groundCoord.add(new Vector(100,200));
+            groundCoord.add(new Vector(500,150));
+            groundCoord.add(new Vector(1000,2000));
+            groundCoord.add(new Vector(2000,2000));
+            groundCoord.add(new Vector(2010,1500));
+            groundCoord.add(new Vector(2200,800));
+            groundCoord.add(new Vector(2500,200));
+            groundCoord.add(new Vector(6899,300));
+            groundCoord.add(new Vector(6999,2500));
+            groundCoord.add(new Vector(4100,2600));
+            groundCoord.add(new Vector(4200,1000));
+            groundCoord.add(new Vector(3500,800));
+            groundCoord.add(new Vector(3100,1100));
+            groundCoord.add(new Vector(3400,2900));
+            groundCoord.add(new Vector(6999,3000));
         }else{
             System.err.println("Error. Level " + levelNumber + " is not implemented.");
         }
@@ -245,49 +283,46 @@ public class Main {
     }
 
     public static NavigationIndividual evolve() {
-
+        // Create an initial population
         Population myPop = new Population(Algorithm.popSize, true);
-        // Visualize pop evolution
-        generationCount = 0;
 
+        // Evolve our population until we reach an optimum solution
+        generationCount = 0;
         while (generationCount < Algorithm.generationCount && Math.round(myPop.getFittest(1)[0].getFitness()) != FitnessCalc.maxFitness) {
 
-            boolean drawBestOnly = true;
-
-            SpaceShuttle physicObject = new SpaceShuttle(Main.mass,
-                    new Vector(Main.initialPos.x, Main.initialPos.y),
-                    new Vector(Main.initialVelocity.x,Main.initialVelocity.y),
-                    Main.initialRotation);
             myPop = Algorithm.evolvePopulation(myPop);
-            NavigationIndividual individual=null;
+            NavigationIndividual bestCandidate = (NavigationIndividual)myPop.getFittest(1)[0];
 
-            if(drawBestOnly){
-                individual =  (NavigationIndividual) myPop.getFittest(1)[0];
-            }else{
-                individual =  (NavigationIndividual) myPop.getIndividual(new Random().nextInt(Algorithm.popSize));
-            }
+            SpaceShuttle physicObject = new SpaceShuttle(
+                    mass,
+                    new Vector(initialPos.x, initialPos.y),
+                    new Vector(initialVelocity.x, initialVelocity.y),
+                    initialRotation);
 
-            System.out.println("Generation: " + generationCount + "\tfitness:" + individual.getFitness());
             double lastPosX = physicObject.position.x;
             double lastPosY = physicObject.position.y;
-            double elapsedTime = 1.0;
 
-            for(int i=0 ; i<individual.getGenes().size() ; i++) {
+            for(int i=0 ; i<bestCandidate.getGenes().size() ; i++) {
+
                 physicObject.netForce = new Vector(gForceMars.x, gForceMars.y);
-                physicObject.thrust(individual.getGene(i)[0]);
-                physicObject.fuel-=individual.getGene(i)[0];
-                physicObject.rotate(individual.getGene(i)[1]);
+                double elapsedTime = 1.0;
+                physicObject.thrust(bestCandidate.getGene(i)[0]);
+                physicObject.fuel-=bestCandidate.getGene(i)[0];
+                physicObject.rotate(bestCandidate.getGene(i)[1]);
                 physicObject.update(elapsedTime);
+
                 if(Vector.isLineCrossingOther(new Vector(lastPosX,lastPosY),physicObject.position,groundCoord)!=null) {
                     break;
                 }
-                if(generationCount%1==0) gui.drawPath(physicObject, (int)lastPosX, (int)lastPosY, generationCount);
+
+                gui.drawPath(physicObject,(int)lastPosX,(int)lastPosY,generationCount);
+
                 lastPosX = physicObject.position.x;
                 lastPosY = physicObject.position.y;
             }
+
             generationCount++;
         }
-
         if (Math.round(myPop.getFittest(1)[0].getFitness()) == FitnessCalc.maxFitness) {
             System.out.println("Solution found! Generation " + generationCount);
             return (NavigationIndividual) myPop.getFittest(1)[0];

@@ -38,7 +38,6 @@ public class GUI extends JPanel {
                 (int)(lastPosX/displayDividingFactor),
                 (int)(screenHeight-(lastPosY/displayDividingFactor)));
 
-
     }
 
     public void update(Graphics g) {

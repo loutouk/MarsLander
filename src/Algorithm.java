@@ -1,6 +1,6 @@
 public class Algorithm {
 
-    public static final int generationCount = 200;
+    public static final int generationCount = 250;
     public static final int popSize = 500;
     public static final double uniformRate = 0.50;
     public static final int tournamentSize = 10;
