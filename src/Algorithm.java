@@ -1,12 +1,12 @@
 public class Algorithm {
 
-    public static final int generationCount = 250;
+    public static final int generationCount = 500;
     public static final int popSize = 500;
     public static final double uniformRate = 0.50;
     public static final int tournamentSize = 10;
     public static final boolean elitism = true;
     public static final int elitismCount = 20;
-    public static double mutationRate = 0.04;
+    public static double mutationRate = 0.06;
 
     public static Population evolvePopulation(Population pop) {
 

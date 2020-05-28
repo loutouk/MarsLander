@@ -1,5 +1,3 @@
-import java.util.Random;
-
 public class FitnessCalc {
 
     public static final int maxFitness = 5000;
@@ -28,7 +26,6 @@ public class FitnessCalc {
 
             Vector startTouchedGround = Vector.isLineCrossingOther(
                     new Vector(lastPosX,lastPosY),physicObject.position,Main.groundCoord);
-
 
             if(startTouchedGround!=null) {
 

@@ -9,6 +9,7 @@ public class Main {
 
     public static double time = 0;
     public static boolean hasTouchGround = false;
+    public static boolean visualizationDone = false;
     public static int generationCount = 0;
 
     public static double mass = 1.0;
@@ -26,7 +27,7 @@ public class Main {
 
     public static void main(String[] args){
 
-        groundCoord = generateGround(7);
+        groundCoord = generateGround(5);
 
         // Identify landing zone
         int lastX = (int) groundCoord.get(0).x;
@@ -51,6 +52,8 @@ public class Main {
         f.setVisible(true);
 
         NavigationIndividual bestCandidate = evolve();
+
+        visualizationDone=true;
 
         double lastPosX = physicObject.position.x;
         double lastPosY = physicObject.position.y;
@@ -334,7 +337,7 @@ public class Main {
                     break;
                 }
 
-                gui.drawPath(physicObject,(int)lastPosX,(int)lastPosY,generationCount);
+                gui.drawPath(physicObject,(int)lastPosX,(int)lastPosY);
 
                 lastPosX = physicObject.position.x;
                 lastPosY = physicObject.position.y;

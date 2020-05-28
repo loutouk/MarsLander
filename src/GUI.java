@@ -5,14 +5,25 @@ import java.io.IOException;
 import java.lang.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GUI extends JPanel {
 
     private static final int displayOffset = 10;
 
-    // Tinker with those variables to have the landscape fit your screen
+    // Tinker with these variables to have the landscape fit your screen
     private static final double displayDividingFactor = 5.2;
     private static final int screenHeight = 768 - displayOffset;
+    private static final int screenWidth = 1366;
+
+    public static final int searchSpaceWidth = 30;
+    public static final int searchSpaceHeight = 20;
+    public static final double drawSearchSpaceFrequency = 0.5; // Between 0 and 1, the higher the more often
+    private static final boolean showSearchSpace = true;
+
+    // Do not touch these variables
+    private static final int cellsXLength = screenWidth/searchSpaceWidth;
+    private static final int cellsYLength = screenHeight/searchSpaceHeight;
 
     private Image landerImage;
 
@@ -25,8 +36,19 @@ public class GUI extends JPanel {
         update(g);
     }
 
-    public void drawPath(PhysicObject shuttle, int lastPosX, int lastPosY, int generationCount){
+    public void drawPath(PhysicObject shuttle, int lastPosX, int lastPosY){
         Graphics g = this.getGraphics();
+
+        if(showSearchSpace && new Random().nextDouble()<drawSearchSpaceFrequency) {
+            int searchSpaceXIndex = (int)(shuttle.position.x/displayDividingFactor/screenWidth*searchSpaceWidth);
+            int searchSpaceYIndex = (int)((screenHeight-(shuttle.position.y/displayDividingFactor))/screenHeight*searchSpaceHeight);
+            g.setColor(new Color(255,0,255, 1));
+            g.fillRect(Math.max(0,searchSpaceXIndex*cellsXLength-1),
+                    Math.max(0,searchSpaceYIndex*cellsYLength-1),
+                    cellsXLength,
+                    cellsYLength);
+        }
+
 
         g.setColor( new Color(
                     0,
@@ -41,8 +63,20 @@ public class GUI extends JPanel {
     }
 
     public void update(Graphics g) {
+
         g.setColor(Color.black);
         g.fillRect(0,0,1400,800);
+
+        if(!Main.visualizationDone) {
+            g.setColor(new Color(255,0,255,100));
+            for(int i=0 ; i<searchSpaceWidth ; i++) {
+                g.drawLine(i*cellsXLength, 0, i*cellsXLength, screenHeight);
+            }
+            for(int i=0 ; i<searchSpaceHeight ; i++) {
+                g.drawLine(0, i*cellsYLength, screenWidth, i*cellsYLength);
+            }
+        }
+
         g.setFont(monoFont);
         g.setColor(whiteColor);
         g.drawString("TIME:" + String.format("%.2f", Main.time) + " sec", 50,100);
